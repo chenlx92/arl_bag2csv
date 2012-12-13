@@ -1,0 +1,14 @@
+<package>
+  <description brief="arl_rosbag">
+
+     arl_rosbag
+
+  </description>
+  <author>parcon</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/arl_rosbag</url>
+  <depend package="roscpp"/>
+</package>
+
+
