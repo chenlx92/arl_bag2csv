@@ -16,13 +16,16 @@
 int main(int argc, char *argv[])
 {
 
-	if (argc > 1 || argc == 0)
+	if (argc =!2)
 	{
-		std::cout << "Too many (or no) arguments........arg= filename.bag";
+		
+		std::cout << "Too many (or no) arguments........arg= filename.bag \n";
+		std::cout << "number of args:" << argc << "\n";
+		std::cout << argv[1] << "\n";
 		return -1;
 
 	}
-
+std::cout << argv[1] << "\n";
 	std::cout << "Extracting data from: " << argv <<std::endl;
 
 	std::stringstream ss;
@@ -33,7 +36,7 @@ int main(int argc, char *argv[])
 	struct tm * timeinfo;
 	char str_now [80];
 
-	ss << argv;
+	ss << argv[1];
 	ss >> argv_name;
 	argv_fullname=argv_name;
 	argv_name.erase(argv_name.end()-4,argv_name.end());
