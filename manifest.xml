@@ -1,18 +1,20 @@
 <package>
-  <description brief="arl_rosbag">
+	<description brief="arl_rosbag">
 
-     arl_rosbag
+	arl_rosbag
 
-  </description>
-  <author>parcon</author>
-  <license>BSD</license>
-  <review status="unreviewed" notes=""/>
-  <url>http://ros.org/wiki/arl_rosbag</url>
-  <depend package="roscpp"/>
-  <depend package="rosbag"/>
-    <depend package="tf"/>
-  <depend package="geometry_msgs"/>
-    <depend package="rosgraph_msgs"/>  
+	</description>
+	<author>parcon</author>
+	<license>BSD</license>
+	<review status="unreviewed" notes=""/>
+	<url>http://ros.org/wiki/arl_rosbag</url>
+	<depend package="roscpp"/>
+	<depend package="rosbag"/>
+	<depend package="tf"/>
+	<depend package="geometry_msgs"/>
+	<depend package="rosgraph_msgs"/>  
+	<depend package="sensor_msgs"/>  
+   
  </package>
 
 

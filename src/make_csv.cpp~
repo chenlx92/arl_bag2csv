@@ -14,6 +14,7 @@
 #include <geometry_msgs/TransformStamped.h> 
 #include <rosgraph_msgs/Log.h>
 #include <tf/tf.h>
+#include <sensor_msgs/Imu.h>
 
 //or just use $ rostopic echo -b file.bag -p /topic
 
@@ -60,55 +61,45 @@ int main(int argc, char *argv[])
 
 myfile << "Sequence, Time, Position in x [m], Position in y [m], Position in z [m],";
 myfile<< "Rotation in x [quaternions], Rotation in y [quaternions], Rotation in z [quaternions], Rotation in w [quaternions],";
-myfile << "Command in Linear x (Pitch) [-1 to 1], Command in Linear y (Roll) [-1 to 1], Command in Linear z (Thrust) [-1 to 1], Command in Angular z (Yaw) [-1 to 1]\n";
+myfile << "Command in Linear x (Pitch) [-1 to 1], Command in Linear y (Roll) [-1 to 1], Command in Linear z (Thrust) [-1 to 1], Command in Angular z (Yaw) [-1 to 1],";
+myfile << "IMU Gyro x [rads/sec],IMU Gyro y [rads/sec],IMU Gyro y [rads/sec],";
+myfile << "IMU Accel x [m/sec^2],IMU Accel x [m/sec^2],IMU Accel x [m/sec^2]";
+myfile <<std::endl;
 	BOOST_FOREACH(rosbag::MessageInstance const m, view)
 	{
-		/*
-		if (m.getTopic() == "/rosout")
-		{
-			rosgraph_msgs::Log::ConstPtr value = m.instantiate<rosgraph_msgs::Log>();
-			if (value != NULL)
-			{	
-				myfile << value->header.stamp << delim;
-			}
-		}//rosout		
-		*/
-		if (m.getTopic() == "/quad/pose")
+		if (m.getTopic() == "/pose")
 		{
 		geometry_msgs::TransformStamped::ConstPtr value = m.instantiate<geometry_msgs::TransformStamped>();
 			
 			if (value != NULL)
 			{	
 				myfile << value->header.seq<< delim << value->header.stamp<< delim;
-				myfile << value->transform.translation.x<< delim << value->transform.translation.y<< delim << value->transform.translation.z;
-				
-				/*	
-				//not working due to no get rotations of tf::quaternion
-				double y1, p1, r1;
-				tf::Quaternion rotations;
-				rotations.x=value->transform.rotation.x;
-				rotations.y=value->transform.rotation.y;
-				rotations.z=value->transform.rotation.z;
-				rotations.w=value->transform.rotation.w;
-				btMatrix3x3(rotations.getRotation()).getRPY(r1, p1, y1);
-				
-				myfile <<r1<< delim << p1<< delim << y1;
-				*/
-				myfile << value->transform.rotation.x<< delim << value->transform.rotation.y<< delim << value->transform.rotation.z;
-				myfile << value->transform.rotation.w;
+				myfile << value->transform.translation.x<< delim << value->transform.translation.y<< delim << value->transform.translation.z<< delim;
+				myfile << value->transform.rotation.x<< delim << value->transform.rotation.y<< delim << value->transform.rotation.z<< delim;
+				myfile << value->transform.rotation.w<< delim;
 			}
 		}//quad pose
 		
-		else if (m.getTopic() == "/cmd_vel")
+		else if (m.getTopic() == "/commands")
 		{
 			geometry_msgs::Twist::ConstPtr value = m.instantiate<geometry_msgs::Twist>();
 			if (value != NULL)
 			{	
 				myfile << value->linear.x << delim << value->linear.y << delim;
 				myfile << value->linear.z << delim << value->angular.z << delim;
-				myfile << std::endl;
 			}
 		}//else cmd_vel
+		
+		else if (m.getTopic() == "/imu")
+		{
+			sensor_msgs::Imu::ConstPtr value = m.instantiate<sensor_msgs::Imu>();
+			if (value != NULL)
+			{	
+				myfile << value->angular_velocity.x << delim << value->angular_velocity.y << delim << value->angular_velocity.z << delim;
+				myfile << value->linear_acceleration.x << delim << value->linear_acceleration.y << delim << value->linear_acceleration.z << delim;
+				myfile << std::endl; //end line
+			}
+		}//else imu
 		
 	}//boost
 	bag.close();

@@ -24,8 +24,10 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 rosbuild_add_boost_directories()
 rosbuild_add_executable(rosbag_to_csv src/make_csv.cpp)
-rosbuild_link_boost(rosbag_to_csv system )
+rosbuild_link_boost(rosbag_to_csv system)
  
+rosbuild_add_executable(make_bag src/make_bag.cpp)
+rosbuild_link_boost(make_bag system)
 #rosbuild_add_executable(test src/test.cpp)
 
 
