@@ -10,6 +10,9 @@
   <url>http://ros.org/wiki/arl_rosbag</url>
   <depend package="roscpp"/>
   <depend package="rosbag"/>
-</package>
+    <depend package="tf"/>
+  <depend package="geometry_msgs"/>
+    <depend package="rosgraph_msgs"/>  
+ </package>
 
 
