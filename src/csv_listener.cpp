@@ -23,8 +23,21 @@
 geometry_msgs::TransformStamped quad1_msg_keep;
 geometry_msgs::TransformStamped quad2_msg_keep;
 std_msgs::Float32MultiArray state_keep;
+/*
+state_keep.data[0]=0;
+state_keep.data[1]=0;
+state_keep.data[2]=0;
+state_keep.data[3]=0;
+state_keep.data[4]=0;
+state_keep.data[5]=0;
+state_keep.data[6]=0;
+state_keep.data[7]=0;
+state_keep.data[8]=0;
+*/
 geometry_msgs::Vector3 joy_keep;
+
 geometry_msgs::Vector3 cmd_keep;
+
 int had_message =0;
 
 
@@ -69,6 +82,26 @@ int main(int argc, char *argv[])
   ros::Subscriber cmd_sub = node.subscribe("/cmd_vel_u", 1, cmd_cb);
   ros::Rate loop_rate(30);
   
+joy_keep.x =0;
+joy_keep.y =0;
+joy_keep.z =0;
+cmd_keep.x=0;
+cmd_keep.y=0;
+cmd_keep.z=0;
+
+state_keep.data[8];
+/*
+state_keep.data[0]=0;
+state_keep.data[1]=0;
+state_keep.data[2]=0;
+state_keep.data[3]=0;
+state_keep.data[4]=0;
+state_keep.data[5]=0;
+state_keep.data[6]=0;
+state_keep.data[7]=0;
+state_keep.data[8]=0;
+*/
+
 if ((argc = !2))
 {
 	
