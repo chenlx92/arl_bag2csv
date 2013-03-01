@@ -26,10 +26,16 @@ rosbuild_add_boost_directories()
 rosbuild_add_executable(rosbag_to_csv src/make_csv.cpp)
 rosbuild_link_boost(rosbag_to_csv system)
  
+#rosbuild_add_executable(roa_to_csv src/make_csv_roa.cpp)
+#rosbuild_link_boost(roa_to_csv system)
+ 
 rosbuild_add_executable(make_bag src/make_bag.cpp)
 rosbuild_link_boost(make_bag system)
-#rosbuild_add_executable(test src/test.cpp)
 
+#rosbuild_add_executable(roa_make_bag src/make_bag_roa.cpp)
+#rosbuild_link_boost(roa_make_bag system)
+
+rosbuild_add_executable(csv_listener src/csv_listener.cpp)
 
 
 #common commands for building c++ executables and libraries
