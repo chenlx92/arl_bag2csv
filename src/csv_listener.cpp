@@ -6,17 +6,17 @@
 #include <sstream>
 
 #include <ros/ros.h>
-#include <rosbag/bag.h>
-#include <rosbag/view.h>
-#include <boost/foreach.hpp>
+//#include <rosbag/bag.h>
+//#include <rosbag/view.h>
+//#include <boost/foreach.hpp>
 #include <std_msgs/Float32MultiArray.h>
-#include <std_msgs/Int32.h>
+//#include <std_msgs/Int32.h>
 #include <geometry_msgs/Twist.h>
 #include <geometry_msgs/TransformStamped.h> 
 #include <geometry_msgs/Vector3.h> 
-#include <rosgraph_msgs/Log.h>
-#include <tf/tf.h>
-#include <sensor_msgs/Imu.h>
+//#include <rosgraph_msgs/Log.h>
+//#include <tf/tf.h>
+//#include <sensor_msgs/Imu.h>
 
 //makes csv from streaming data, use this program simultaniously with experiment or bag replaying
 
@@ -38,36 +38,39 @@ geometry_msgs::Vector3 joy_keep;
 
 geometry_msgs::Vector3 cmd_keep;
 
-int had_message =0;
-
+int m1 =0;
+int m2 =0;
+int m3 =0;
+int m4 =0;
+int m5 =0;
 
 void quad1_cb(const geometry_msgs::TransformStamped& pose_msg)
 {
-had_message =1;
+m1 =1;
   quad1_msg_keep=pose_msg;
 }
 
 void quad2_cb(const geometry_msgs::TransformStamped& pose_msg)
 {
-had_message =1;
+m2 =1;
   quad2_msg_keep=pose_msg;
 }
 
 void state_cb(const std_msgs::Float32MultiArray& msg)
 {
-had_message =1;
+m3 =1;
   state_keep=msg;
 }
 
 void joy_cb(const geometry_msgs::Vector3& msg)
 {
-had_message =1;
+m4 =1;
   joy_keep=msg;
 }
 
 void cmd_cb(const geometry_msgs::Vector3& msg)
 {
-had_message =1;
+m5 =1;
   cmd_keep=msg;
 }
 
@@ -81,13 +84,14 @@ int main(int argc, char *argv[])
   ros::Subscriber joy_sub = node.subscribe("/joy_vel", 1, joy_cb);
   ros::Subscriber cmd_sub = node.subscribe("/cmd_vel_u", 1, cmd_cb);
   ros::Rate loop_rate(30);
-  
+  ROS_INFO("cecck");
 joy_keep.x =0;
 joy_keep.y =0;
 joy_keep.z =0;
 cmd_keep.x=0;
 cmd_keep.y=0;
 cmd_keep.z=0;
+
 
 state_keep.data[8];
 /*
@@ -101,7 +105,7 @@ state_keep.data[6]=0;
 state_keep.data[7]=0;
 state_keep.data[8]=0;
 */
-
+ROS_INFO("chech");
 if ((argc = !2))
 {
 	
@@ -144,30 +148,37 @@ myfile << "Quad2 Vel x [m/s],Quad2 Vel y [m/s],Quad2 Vel z [m/s],";
 myfile << "Joy Input Vel x [m/s],Quad2 Vel y [m/s],Quad2 Vel z [m/s],";
 
 myfile << "Cmd Vel Output Vel x [m/s],Quad2 Vel y [m/s],Quad2 Vel z [m/s],";
+myfile << std::endl; //end line
 
 std::cout << "Creating csv from bag." <<std::endl;
 
 
-	if (!had_message){
+	if (!(m1 && m2 && m3 && m4 && m5)){
 	ROS_INFO("Waiting for message.");
 	}
-	while (!had_message){
+	while (!(m1 && m2 && m3 && m4 && m5)){
 	ros::spinOnce ();
 	loop_rate.sleep ();
 	}
 	
 	ROS_INFO("Creating csv");
-	while (ros::ok() && had_message)
+	while (ros::ok() && m1 && m2 && m3 && m4 && m5)
 		{
+		
 	//print quad1
 		myfile << quad1_msg_keep.header.seq<< delim << quad1_msg_keep.header.stamp<< delim;
 		myfile << quad1_msg_keep.transform.translation.x<< delim << quad1_msg_keep.transform.translation.y<< delim << quad1_msg_keep.transform.translation.z<< delim;
 	//quad2
 		myfile << quad2_msg_keep.transform.translation.x<< delim << quad2_msg_keep.transform.translation.y<< delim << quad2_msg_keep.transform.translation.z<< delim;
 	//state
-		myfile << state_keep.data[0] << delim << state_keep.data[1] << delim << state_keep.data[2] << delim;
+
+		myfile << state_keep.data[0];
+
+		myfile << delim << state_keep.data[1] << delim << state_keep.data[2] << delim;
+
 		myfile << state_keep.data[3] << delim << state_keep.data[4] << delim << state_keep.data[5] << delim;
 		myfile << state_keep.data[6] << delim << state_keep.data[7] << delim << state_keep.data[8] << delim;
+
 	//joy
 		myfile << joy_keep.x << delim << joy_keep.y << delim << joy_keep.z << delim;
 	//cmd
